@@ -25,9 +25,7 @@ import java.util.UUID;
 public class ArduinoMain extends ActionBarActivity {
 
     // Declare buttons and editText
-    Button functionOne, functionTwo, forward, reverse, left, right;
-
-    private EditText editText;
+    Button reset, forward, reverse, left, right;
 
     // Member fields
     private BluetoothAdapter btAdapter = null;
@@ -45,11 +43,8 @@ public class ArduinoMain extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arduino_main);
 
-        addKeyListener();
-
         // Initialising buttons in the view
-        functionOne = (Button) findViewById(R.id.functionOne);
-        functionTwo = (Button) findViewById(R.id.functionTwo);
+        reset = (Button) findViewById(R.id.reset);
         forward = (Button) findViewById(R.id.moveForward);
         reverse = (Button) findViewById(R.id.moveReverse);
         left = (Button) findViewById(R.id.turnLeft);
@@ -60,54 +55,18 @@ public class ArduinoMain extends ActionBarActivity {
         checkBTState();
 
         // setup click listeners on the buttons
-        functionOne.setOnClickListener(new OnClickListener(){
-            public void onClick(View v){
-                sendData("3:200");
-                Toast.makeText(getBaseContext(), "Function 1", Toast.LENGTH_SHORT).show();
-            }
-        });
 
-        functionTwo.setOnClickListener(new OnClickListener() {
+        reset.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 sendData("9");
-                Toast.makeText(getBaseContext(), "Function 2", Toast.LENGTH_SHORT).show();
             }
         });
-
-//        forward.setOnClickListener(new OnClickListener() {
-//            public void onClick(View v) {
-//                sendData("3:220");
-//                Toast.makeText(getBaseContext(), "Forward", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        reverse.setOnClickListener(new OnClickListener() {
-//            public void onClick(View v) {
-//                sendData("1:220");
-//                Toast.makeText(getBaseContext(), "Reverse", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        left.setOnClickListener(new OnClickListener() {
-//            public void onClick(View v) {
-//                sendData("4:200");
-//                Toast.makeText(getBaseContext(), "Left", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        right.setOnClickListener(new OnClickListener() {
-//            public void onClick(View v) {
-//                sendData("6:200");
-//                Toast.makeText(getBaseContext(), "Right", Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
         forward.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
                     sendData("3:220");
-                    Toast.makeText(getBaseContext(), "Forward", Toast.LENGTH_SHORT).show();
                     return true;
                 } else if(event.getAction() == MotionEvent.ACTION_UP){
                     sendData("2");
@@ -122,7 +81,6 @@ public class ArduinoMain extends ActionBarActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
                     sendData("1:220");
-                    Toast.makeText(getBaseContext(), "Reverse", Toast.LENGTH_SHORT).show();
                     return true;
                 } else if(event.getAction() == MotionEvent.ACTION_UP){
                     sendData("2");
@@ -137,7 +95,6 @@ public class ArduinoMain extends ActionBarActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
                     sendData("4:200");
-                    Toast.makeText(getBaseContext(), "Left", Toast.LENGTH_SHORT).show();
                     return true;
                 } else if(event.getAction() == MotionEvent.ACTION_UP){
                     sendData("5");
@@ -152,7 +109,6 @@ public class ArduinoMain extends ActionBarActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
                     sendData("6:200");
-                    Toast.makeText(getBaseContext(), "Right", Toast.LENGTH_SHORT).show();
                     return true;
                 } else if(event.getAction() == MotionEvent.ACTION_UP){
                     sendData("5");
@@ -246,27 +202,5 @@ public class ArduinoMain extends ActionBarActivity {
             Toast.makeText(getBaseContext(), "Error - Device not found", Toast.LENGTH_SHORT).show();
             finish();
         }
-    }
-
-    public void addKeyListener(){
-        //get edittext component
-        editText = (EditText) findViewById(R.id.editText1);
-
-        // add a keylistener to keep track of user input
-        editText.setOnKeyListener(new OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                // if the keydown and send is pressed implement the sendData method
-                if((keyCode == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN)){
-                    sendData(editText.getText().toString());
-                    Toast.makeText(getBaseContext(), "Sending Text", Toast.LENGTH_SHORT).show();
-
-                    return true;
-                }
-
-                return false;
-            }
-        });
     }
 }
